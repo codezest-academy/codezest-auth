@@ -1,3 +1,5 @@
+// dotenv config moved to env-setup.ts
+
 // Mock environment variables
 process.env.JWT_SECRET = 'test-secret';
 process.env.JWT_REFRESH_SECRET = 'test-refresh-secret';
@@ -53,24 +55,13 @@ jest.mock('../src/config', () => ({
     logging: {
       level: 'info',
     },
-    redis: { // Add Redis config for tests
-      host: 'localhost',
-      port: 6379,
-      password: '',
+    redis: {
+      // Add Redis config for tests
+      host: process.env.REDIS_HOST || 'localhost',
+      port: Number(process.env.REDIS_PORT) || 6380,
+      password: process.env.REDIS_PASSWORD || '', // Dynamically get password
     },
   },
-}));
-
-// Mock the cache module
-jest.mock('@codezest-academy/codezest-cache', () => ({
-  createCacheClient: jest.fn(() => ({
-    get: jest.fn(),
-    set: jest.fn(),
-    del: jest.fn(),
-    delPattern: jest.fn(),
-    clear: jest.fn(),
-    disconnect: jest.fn(),
-  })),
 }));
 
 // Mock EmailService

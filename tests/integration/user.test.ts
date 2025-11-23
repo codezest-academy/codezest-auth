@@ -3,12 +3,27 @@ import app from '../../src/app';
 import PrismaService from '../../src/infrastructure/database/prisma.service';
 import { TokenUtil } from '../../src/common/utils/token.util';
 import { UserRole } from '@prisma/client'; // Import UserRole directly
+import cache from '../../src/infrastructure/cache/cache.service'; // Import the cache client
+
+// Mock the cache client locally for this integration test
+jest.mock('../../src/infrastructure/cache/cache.service', () => ({
+  __esModule: true, // This is important for default exports
+  default: {
+    get: jest.fn(),
+    set: jest.fn(),
+    del: jest.fn(),
+    delPattern: jest.fn(),
+    clear: jest.fn(),
+    disconnect: jest.fn(),
+  },
+}));
 
 describe('User Integration', () => {
   const prismaService = PrismaService.getInstance();
   const prisma = prismaService.client;
   let authToken: string;
   let userId: string;
+  let mockCache: jest.Mocked<typeof cache>;
 
   beforeAll(async () => {
     // Connect to database
@@ -33,6 +48,12 @@ describe('User Integration', () => {
       email: user.email,
       role: user.role,
     });
+  });
+
+  beforeEach(() => {
+    mockCache = cache as jest.Mocked<typeof cache>;
+    mockCache.get.mockReset();
+    mockCache.set.mockReset();
   });
 
   afterAll(async () => {
