@@ -1,0 +1,36 @@
+
+> codezest-auth@1.0.0 lint
+> eslint src/**/*.ts
+
+
+/Volumes/CVS Sandisk 1TB SkyBlue/Quiz/codezest-auth/src/controllers/auth.controller.ts
+  4:10  error  'logger' is defined but never used  @typescript-eslint/no-unused-vars
+
+/Volumes/CVS Sandisk 1TB SkyBlue/Quiz/codezest-auth/src/middleware/auth.middleware.ts
+  7:3  error  ES2015 module syntax is preferred over namespaces  @typescript-eslint/no-namespace
+
+/Volumes/CVS Sandisk 1TB SkyBlue/Quiz/codezest-auth/src/middleware/error.middleware.ts
+  13:3   error    'next' is defined but never used. Allowed unused args must match /^_/u                                                                                                                                                                                                                                                                                                                                              @typescript-eslint/no-unused-vars
+  22:21  warning  Unexpected any. Specify a different type                                                                                                                                                                                                                                                                                                                                                                            @typescript-eslint/no-explicit-any
+  91:34  error    Don't use `Function` as a type. The `Function` type accepts any function-like value.
+It provides no type safety when calling the function, which can be a common source of bugs.
+It also accepts things like class declarations, which will throw at runtime as they will not be called with `new`.
+If you are expecting the function to accept certain arguments, you should explicitly define the function shape  @typescript-eslint/ban-types
+
+/Volumes/CVS Sandisk 1TB SkyBlue/Quiz/codezest-auth/src/middleware/logger.middleware.ts
+  25:31  warning  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+
+/Volumes/CVS Sandisk 1TB SkyBlue/Quiz/codezest-auth/src/services/oauth.service.ts
+  71:28  warning  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  72:33  warning  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+
+/Volumes/CVS Sandisk 1TB SkyBlue/Quiz/codezest-auth/src/services/user.service.ts
+  119:30  warning  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  123:58  warning  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+
+/Volumes/CVS Sandisk 1TB SkyBlue/Quiz/codezest-auth/src/utils/token.util.ts
+  18:42  warning  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  30:49  warning  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+
+✖ 12 problems (4 errors, 8 warnings)
+

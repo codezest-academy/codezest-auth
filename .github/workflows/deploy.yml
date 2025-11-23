@@ -1,0 +1,74 @@
+name: Deploy
+
+on:
+  workflow_dispatch:
+    inputs:
+      environment:
+        description: 'Deployment environment'
+        required: true
+        type: choice
+        options:
+          - staging
+          - production
+      version:
+        description: 'Docker image version/tag to deploy'
+        required: true
+        type: string
+
+jobs:
+  deploy:
+    name: Deploy to ${{ inputs.environment }}
+    runs-on: ubuntu-latest
+    environment: ${{ inputs.environment }}
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Deploy to ${{ inputs.environment }}
+        run: |
+          echo "Deploying version ${{ inputs.version }} to ${{ inputs.environment }}"
+          echo "This is a placeholder for actual deployment logic"
+          echo "You can integrate with:"
+          echo "  - Kubernetes (kubectl apply)"
+          echo "  - Docker Swarm"
+          echo "  - Cloud providers (AWS ECS, Google Cloud Run, Azure Container Instances)"
+          echo "  - SSH deployment to VPS"
+
+      # Example: Deploy to Kubernetes
+      # - name: Set up kubectl
+      #   uses: azure/setup-kubectl@v3
+      #   with:
+      #     version: 'latest'
+      #
+      # - name: Configure kubectl
+      #   run: |
+      #     echo "${{ secrets.KUBE_CONFIG }}" | base64 -d > kubeconfig
+      #     export KUBECONFIG=kubeconfig
+      #
+      # - name: Deploy to cluster
+      #   run: |
+      #     kubectl set image deployment/codezest-auth \
+      #       codezest-auth=ghcr.io/${{ github.repository }}:${{ inputs.version }} \
+      #       -n ${{ inputs.environment }}
+      #     kubectl rollout status deployment/codezest-auth -n ${{ inputs.environment }}
+
+      # Example: Deploy to Cloud Run
+      # - name: Deploy to Google Cloud Run
+      #   uses: google-github-actions/deploy-cloudrun@v2
+      #   with:
+      #     service: codezest-auth
+      #     image: ghcr.io/${{ github.repository }}:${{ inputs.version }}
+      #     region: us-central1
+      #     env_vars: |
+      #       NODE_ENV=${{ inputs.environment }}
+
+      - name: Deployment summary
+        run: |
+          echo "### Deployment Summary :rocket:" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "- **Environment**: ${{ inputs.environment }}" >> $GITHUB_STEP_SUMMARY
+          echo "- **Version**: ${{ inputs.version }}" >> $GITHUB_STEP_SUMMARY
+          echo "- **Status**: Placeholder (not actually deployed)" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "> **Note**: This is a placeholder workflow. Configure actual deployment steps above." >> $GITHUB_STEP_SUMMARY

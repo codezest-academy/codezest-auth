@@ -1,0 +1,75 @@
+import { UserService } from '../../../src/application/services/user.service';
+import { UserRepository } from '../../../src/infrastructure/repositories/user.repository';
+import { UserProfileRepository } from '../../../src/infrastructure/repositories/userProfile.repository';
+import { NotFoundError } from '../../../src/domain/errors';
+import { User } from '../../../src/domain/entities';
+
+// Mock dependencies
+jest.mock('../../../src/infrastructure/repositories/user.repository');
+jest.mock('../../../src/infrastructure/repositories/userProfile.repository');
+
+describe('UserService', () => {
+  let userService: UserService;
+  let mockUserRepository: jest.Mocked<UserRepository>;
+  let mockUserProfileRepository: jest.Mocked<UserProfileRepository>;
+
+  beforeEach(() => {
+    mockUserRepository = new UserRepository() as jest.Mocked<UserRepository>;
+    mockUserProfileRepository = new UserProfileRepository() as jest.Mocked<UserProfileRepository>;
+    userService = new UserService(mockUserRepository, mockUserProfileRepository);
+  });
+
+  describe('getUserById', () => {
+    it('should return user if found', async () => {
+      const mockUser = new User(
+        'user-id',
+        'test@example.com',
+        'Test User',
+        'USER',
+        true,
+        new Date(),
+        new Date(),
+        'hashedPassword'
+      );
+      mockUserRepository.findById.mockResolvedValue(mockUser);
+
+      const result = await userService.getUserById('user-id');
+
+      expect(result).toEqual(mockUser);
+    });
+
+    it('should throw NotFoundError if user not found', async () => {
+      mockUserRepository.findById.mockResolvedValue(null);
+
+      await expect(userService.getUserById('user-id')).rejects.toThrow(NotFoundError);
+    });
+  });
+
+  describe('updateProfile', () => {
+    it('should update profile successfully', async () => {
+      const userId = 'user-id';
+      const profileData = { bio: 'New bio' };
+      const mockProfile = { id: 'profile-id', userId, ...profileData };
+
+      const mockUser = new User(
+        userId,
+        'test@example.com',
+        'Test User',
+        'USER',
+        true,
+        new Date(),
+        new Date(),
+        'hashedPassword'
+      );
+
+      mockUserRepository.findById.mockResolvedValue(mockUser);
+      mockUserProfileRepository.findByUserId.mockResolvedValue(mockProfile as any);
+      mockUserProfileRepository.update.mockResolvedValue(mockProfile as any);
+
+      const result = await userService.updateProfile(userId, profileData);
+
+      expect(result).toEqual(mockProfile);
+      expect(mockUserProfileRepository.update).toHaveBeenCalledWith(userId, profileData);
+    });
+  });
+});

@@ -1,0 +1,28 @@
+
+> codezest-auth@1.0.0 lint
+> eslint src/**/*.ts
+
+
+/Volumes/CVS Sandisk 1TB SkyBlue/Quiz/codezest-auth/src/middleware/auth.middleware.ts
+  2:21  error  'TokenPayload' is defined but never used  @typescript-eslint/no-unused-vars
+
+/Volumes/CVS Sandisk 1TB SkyBlue/Quiz/codezest-auth/src/middleware/error.middleware.ts
+  17:21  warning  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+
+/Volumes/CVS Sandisk 1TB SkyBlue/Quiz/codezest-auth/src/middleware/logger.middleware.ts
+  25:31  warning  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+
+/Volumes/CVS Sandisk 1TB SkyBlue/Quiz/codezest-auth/src/services/oauth.service.ts
+  71:28  warning  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  72:33  warning  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+
+/Volumes/CVS Sandisk 1TB SkyBlue/Quiz/codezest-auth/src/services/user.service.ts
+  119:30  warning  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  123:58  warning  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+
+/Volumes/CVS Sandisk 1TB SkyBlue/Quiz/codezest-auth/src/utils/token.util.ts
+  18:42  warning  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  30:49  warning  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+
+✖ 9 problems (1 error, 8 warnings)
+
