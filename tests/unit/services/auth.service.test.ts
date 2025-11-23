@@ -1,12 +1,13 @@
 import { AuthService } from '../../../src/application/services/auth.service';
-import { SessionRepository } from '../../../src/infrastructure/repositories/session.repository';
-import { UserRepository } from '../../../src/infrastructure/repositories/user.repository';
-import { EmailVerificationRepository } from '../../../src/infrastructure/repositories/emailVerification.repository';
-import { PasswordResetRepository } from '../../../src/infrastructure/repositories/passwordReset.repository';
+import { PrismaSessionRepository } from '../../../src/infrastructure/repositories/session.repository';
+import { PrismaUserRepository } from '../../../src/infrastructure/repositories/user.repository';
+import { PrismaEmailVerificationRepository } from '../../../src/infrastructure/repositories/emailVerification.repository';
+import { PrismaPasswordResetRepository } from '../../../src/infrastructure/repositories/passwordReset.repository';
 import { TokenUtil } from '../../../src/common/utils/token.util';
 import { BadRequestError, UnauthorizedError, ConflictError } from '../../../src/domain/errors';
 import { User } from '../../../src/domain/entities';
 import bcrypt from 'bcryptjs';
+import { EmailService } from '../../../src/application/services/email.service'; // Import EmailService
 
 // Mock dependencies
 jest.mock('../../../src/infrastructure/repositories/user.repository');
@@ -15,26 +16,31 @@ jest.mock('../../../src/infrastructure/repositories/emailVerification.repository
 jest.mock('../../../src/infrastructure/repositories/passwordReset.repository');
 jest.mock('../../../src/common/utils/token.util');
 jest.mock('bcryptjs');
+jest.mock('../../../src/application/services/email.service'); // Mock EmailService
 
 describe('AuthService', () => {
   let authService: AuthService;
-  let mockUserRepository: jest.Mocked<UserRepository>;
-  let mockSessionRepository: jest.Mocked<SessionRepository>;
-  let mockEmailVerificationRepository: jest.Mocked<EmailVerificationRepository>;
-  let mockPasswordResetRepository: jest.Mocked<PasswordResetRepository>;
+  let mockUserRepository: jest.Mocked<PrismaUserRepository>;
+  let mockSessionRepository: jest.Mocked<PrismaSessionRepository>;
+  let mockEmailVerificationRepository: jest.Mocked<PrismaEmailVerificationRepository>;
+  let mockPasswordResetRepository: jest.Mocked<PrismaPasswordResetRepository>;
+  let mockEmailService: jest.Mocked<EmailService>; // Declare mockEmailService
 
   beforeEach(() => {
-    mockUserRepository = new UserRepository() as jest.Mocked<UserRepository>;
-    mockSessionRepository = new SessionRepository() as jest.Mocked<SessionRepository>;
+    mockUserRepository = new PrismaUserRepository() as jest.Mocked<PrismaUserRepository>;
+    mockSessionRepository = new PrismaSessionRepository() as jest.Mocked<PrismaSessionRepository>;
     mockEmailVerificationRepository =
-      new EmailVerificationRepository() as jest.Mocked<EmailVerificationRepository>;
+      new PrismaEmailVerificationRepository() as jest.Mocked<PrismaEmailVerificationRepository>;
     mockPasswordResetRepository =
-      new PasswordResetRepository() as jest.Mocked<PasswordResetRepository>;
+      new PrismaPasswordResetRepository() as jest.Mocked<PrismaPasswordResetRepository>;
+    mockEmailService = new EmailService() as jest.Mocked<EmailService>; // Instantiate mockEmailService
+
     authService = new AuthService(
       mockUserRepository,
       mockSessionRepository,
       mockEmailVerificationRepository,
-      mockPasswordResetRepository
+      mockPasswordResetRepository,
+      mockEmailService // Pass mockEmailService to the constructor
     );
   });
 

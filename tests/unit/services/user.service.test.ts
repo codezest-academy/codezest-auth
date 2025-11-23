@@ -1,6 +1,6 @@
 import { UserService } from '../../../src/application/services/user.service';
-import { UserRepository } from '../../../src/infrastructure/repositories/user.repository';
-import { UserProfileRepository } from '../../../src/infrastructure/repositories/userProfile.repository';
+import { PrismaUserRepository } from '../../../src/infrastructure/repositories/user.repository';
+import { PrismaUserProfileRepository } from '../../../src/infrastructure/repositories/userProfile.repository';
 import { NotFoundError } from '../../../src/domain/errors';
 import { User } from '../../../src/domain/entities';
 
@@ -10,12 +10,12 @@ jest.mock('../../../src/infrastructure/repositories/userProfile.repository');
 
 describe('UserService', () => {
   let userService: UserService;
-  let mockUserRepository: jest.Mocked<UserRepository>;
-  let mockUserProfileRepository: jest.Mocked<UserProfileRepository>;
+  let mockUserRepository: jest.Mocked<PrismaUserRepository>;
+  let mockUserProfileRepository: jest.Mocked<PrismaUserProfileRepository>;
 
   beforeEach(() => {
-    mockUserRepository = new UserRepository() as jest.Mocked<UserRepository>;
-    mockUserProfileRepository = new UserProfileRepository() as jest.Mocked<UserProfileRepository>;
+    mockUserRepository = new PrismaUserRepository() as jest.Mocked<PrismaUserRepository>;
+    mockUserProfileRepository = new PrismaUserProfileRepository() as jest.Mocked<PrismaUserProfileRepository>;
     userService = new UserService(mockUserRepository, mockUserProfileRepository);
   });
 

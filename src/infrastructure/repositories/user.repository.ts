@@ -1,10 +1,10 @@
 import { Prisma } from '@prisma/client';
 import { User } from '../../domain/entities';
 import PrismaService from '../database/prisma.service';
-import { IUserRepository } from '../../domain/repositories/user.repository.interface';
+import { UserRepository } from '../../domain/repositories/user.repository';
 import { UserMapper } from '../mappers/user.mapper';
 
-export class UserRepository implements IUserRepository {
+export class PrismaUserRepository implements UserRepository {
   private prisma = PrismaService.getInstance().client;
 
   async findById(id: string): Promise<User | null> {

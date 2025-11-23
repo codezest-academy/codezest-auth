@@ -1,7 +1,7 @@
 import { Prisma } from '@prisma/client';
 import { EmailVerification } from '../entities';
 
-export interface IEmailVerificationRepository {
+export interface EmailVerificationRepository {
   findByToken(token: string): Promise<EmailVerification | null>;
   findByUserId(userId: string): Promise<EmailVerification | null>;
   create(data: Prisma.EmailVerificationCreateInput): Promise<EmailVerification>;

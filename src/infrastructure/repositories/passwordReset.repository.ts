@@ -2,10 +2,10 @@ import { Prisma } from '@prisma/client';
 import { PasswordReset } from '../../domain/entities';
 import PrismaService from '../database/prisma.service';
 
-import { IPasswordResetRepository } from '../../domain/repositories/passwordReset.repository.interface';
+import { PasswordResetRepository } from '../../domain/repositories/passwordReset.repository';
 import { PasswordResetMapper } from '../mappers/token.mapper';
 
-export class PasswordResetRepository implements IPasswordResetRepository {
+export class PrismaPasswordResetRepository implements PasswordResetRepository {
   private prisma = PrismaService.getInstance().client;
   async findByToken(token: string): Promise<PasswordReset | null> {
     const reset = await this.prisma.passwordReset.findUnique({

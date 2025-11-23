@@ -77,3 +77,36 @@ A typical request follows this path:
 - **Testability**: You can test the Application layer without a database by mocking the Repository Interfaces.
 - **Flexibility**: You can swap out the database (Infrastructure) without changing the business logic (Domain/Application).
 - **Maintainability**: Code is organized by function, making it easier to find and fix issues.
+
+## Naming Conventions
+
+To maintain consistency and readability across the codebase, the following naming conventions are enforced:
+
+- **Files and Folders**:
+    - Use `dot-case` for file names (e.g., `user.profile.ts`, `auth.service.ts`).
+    - Use `kebab-case` for folder names (e.g., `user-profile`, `auth-service`).
+    - `index.ts` files are used for barrel exports within directories.
+- **Classes**:
+    - Use `PascalCase` for class names (e.g., `UserService`, `AuthController`).
+- **Interfaces**:
+    - Use `PascalCase` and suffix with `Interface` (e.g., `UserRepositoryInterface`).
+- **Functions and Methods**:
+    - Use `camelCase` for function and method names (e.g., `getUserById`, `createSession`).
+- **Variables and Properties**:
+    - Use `camelCase` for variable and property names (e.g., `userName`, `createdAt`).
+- **Constants**:
+    - Use `SCREAMING_SNAKE_CASE` for global constants (e.g., `JWT_SECRET`, `REDIS_CACHE_TTL`).
+- **Enums**:
+    - Use `PascalCase` for enum names and `PascalCase` for their members (e.g., `UserRole.Admin`, `UserStatus.Active`).
+- **DTOs**:
+    - Use `PascalCase` and suffix with `Dto` (e.g., `CreateUserDto`, `AuthResponseDto`).
+- **Mappers**:
+    - Use `PascalCase` and suffix with `Mapper` (e.g., `UserMapper`, `OAuthAccountMapper`).
+- **Services**:
+    - Use `PascalCase` and suffix with `Service` (e.g., `AuthService`, `EmailService`).
+- **Controllers**:
+    - Use `PascalCase` and suffix with `Controller` (e.g., `AuthController`, `UserController`).
+- **Repositories**:
+    - Use `PascalCase` and suffix with `Repository` (e.g., `UserRepository`, `SessionRepository`).
+- **Entities**:
+    - Use `PascalCase` for entity names (e.g., `User`, `Session`).

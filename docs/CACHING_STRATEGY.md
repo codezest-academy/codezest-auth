@@ -531,7 +531,7 @@ import { cacheService } from '../services/cache.service';
 import { CacheKeys } from '../utils/cache.utils';
 import { CACHE_TTL } from '../config/cache';
 
-export class UserRepository implements IUserRepository {
+export class UserRepository implements UserRepository {
   async findById(id: string): Promise<User | null> {
     // 1. Try cache first
     const cacheKey = CacheKeys.user.byId(id);

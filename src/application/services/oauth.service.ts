@@ -1,7 +1,7 @@
 import { User } from '../../domain/entities';
-import { IUserRepository } from '../../domain/repositories/user.repository.interface';
-import { IOAuthRepository } from '../../domain/repositories/oauth.repository.interface';
-import { ISessionRepository } from '../../domain/repositories/session.repository.interface';
+import { UserRepository } from '../../domain/repositories/user.repository';
+import { OAuthRepository } from '../../domain/repositories/oauth.repository';
+import { SessionRepository } from '../../domain/repositories/session.repository';
 import { TokenUtil } from '../../common/utils/token.util';
 import { logger } from '../../config/logger';
 import { IOAuthStrategy, GoogleOAuthStrategy, GitHubOAuthStrategy } from './oauth/oauth.strategy';
@@ -9,15 +9,15 @@ import { AuthTokens } from './auth.service';
 import { UserRole } from '@prisma/client'; // Import UserRole
 
 export class OAuthService {
-  private userRepository: IUserRepository;
-  private oauthRepository: IOAuthRepository;
-  private sessionRepository: ISessionRepository;
+  private userRepository: UserRepository;
+  private oauthRepository: OAuthRepository;
+  private sessionRepository: SessionRepository;
   private strategies: Map<string, IOAuthStrategy>;
 
   constructor(
-    userRepository: IUserRepository,
-    oauthRepository: IOAuthRepository,
-    sessionRepository: ISessionRepository
+    userRepository: UserRepository,
+    oauthRepository: OAuthRepository,
+    sessionRepository: SessionRepository
   ) {
     this.userRepository = userRepository;
     this.oauthRepository = oauthRepository;

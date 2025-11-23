@@ -1,17 +1,17 @@
 import { Router } from 'express';
 import { OAuthController } from '../controllers/oauth.controller';
 import { OAuthService } from '../../application/services/oauth.service';
-import { UserRepository } from '../../infrastructure/repositories/user.repository';
-import { OAuthRepository } from '../../infrastructure/repositories/oauth.repository';
-import { SessionRepository } from '../../infrastructure/repositories/session.repository';
+import { PrismaUserRepository } from '../../infrastructure/repositories/user.repository';
+import { PrismaOAuthRepository } from '../../infrastructure/repositories/oauth.repository';
+import { PrismaSessionRepository } from '../../infrastructure/repositories/session.repository';
 import { authenticate } from '../middleware/auth.middleware';
 
 const router = Router();
 
 // Dependency Injection
-const userRepository = new UserRepository();
-const oauthRepository = new OAuthRepository();
-const sessionRepository = new SessionRepository();
+const userRepository = new PrismaUserRepository();
+const oauthRepository = new PrismaOAuthRepository();
+const sessionRepository = new PrismaSessionRepository();
 
 const oauthService = new OAuthService(userRepository, oauthRepository, sessionRepository);
 const oauthController = new OAuthController(oauthService);

@@ -10,6 +10,9 @@ const requiredEnvVars = [
   'JWT_SECRET',
   'JWT_REFRESH_SECRET',
   'PORT',
+  'REDIS_HOST',
+  'REDIS_PORT',
+  'REDIS_PASSWORD',
 ];
 
 for (const envVar of requiredEnvVars) {
@@ -25,6 +28,12 @@ export const config = {
 
   database: {
     url: process.env.DATABASE_URL!,
+  },
+
+  redis: {
+    host: process.env.REDIS_HOST || 'localhost',
+    port: parseInt(process.env.REDIS_PORT || '6379', 10),
+    password: process.env.REDIS_PASSWORD || '',
   },
 
   jwt: {

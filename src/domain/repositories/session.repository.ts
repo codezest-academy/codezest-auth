@@ -1,7 +1,7 @@
 import { Prisma } from '@prisma/client';
 import { Session } from '../entities';
 
-export interface ISessionRepository {
+export interface SessionRepository {
   findByToken(token: string): Promise<Session | null>;
   findByUserId(userId: string): Promise<Session[]>;
   create(data: Prisma.SessionCreateInput): Promise<Session>;

@@ -2,10 +2,10 @@ import { Prisma } from '@prisma/client';
 import { EmailVerification } from '../../domain/entities';
 import PrismaService from '../database/prisma.service';
 
-import { IEmailVerificationRepository } from '../../domain/repositories/emailVerification.repository.interface';
+import { EmailVerificationRepository } from '../../domain/repositories/emailVerification.repository';
 import { EmailVerificationMapper } from '../mappers/token.mapper';
 
-export class EmailVerificationRepository implements IEmailVerificationRepository {
+export class PrismaEmailVerificationRepository implements EmailVerificationRepository {
   private prisma = PrismaService.getInstance().client;
   async findByToken(token: string): Promise<EmailVerification | null> {
     const verification = await this.prisma.emailVerification.findUnique({

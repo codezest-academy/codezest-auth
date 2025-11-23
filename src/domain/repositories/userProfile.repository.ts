@@ -1,6 +1,6 @@
 import { UserProfile, Prisma } from '@prisma/client';
 
-export interface IUserProfileRepository {
+export interface UserProfileRepository {
   findByUserId(userId: string): Promise<UserProfile | null>;
   create(data: Prisma.UserProfileCreateInput): Promise<UserProfile>;
   update(userId: string, data: Prisma.UserProfileUpdateInput): Promise<UserProfile>;

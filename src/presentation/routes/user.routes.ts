@@ -1,8 +1,8 @@
 import { Router } from 'express';
 import { UserController } from '../controllers/user.controller';
 import { UserService } from '../../application/services/user.service';
-import { UserRepository } from '../../infrastructure/repositories/user.repository';
-import { UserProfileRepository } from '../../infrastructure/repositories/userProfile.repository';
+import { PrismaUserRepository } from '../../infrastructure/repositories/user.repository';
+import { PrismaUserProfileRepository } from '../../infrastructure/repositories/userProfile.repository';
 import { validate } from '../middleware/validate.middleware';
 import { authenticate } from '../middleware/auth.middleware';
 import { updateProfileSchema, updatePreferencesSchema } from '../../application/dtos/user.dto';
@@ -10,8 +10,8 @@ import { updateProfileSchema, updatePreferencesSchema } from '../../application/
 const router = Router();
 
 // Dependency Injection
-const userRepository = new UserRepository();
-const userProfileRepository = new UserProfileRepository();
+const userRepository = new PrismaUserRepository();
+const userProfileRepository = new PrismaUserProfileRepository();
 
 const userService = new UserService(userRepository, userProfileRepository);
 const userController = new UserController(userService);

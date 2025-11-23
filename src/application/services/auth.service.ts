@@ -1,8 +1,8 @@
 import { User } from '../../domain/entities';
-import { IUserRepository } from '../../domain/repositories/user.repository.interface';
-import { ISessionRepository } from '../../domain/repositories/session.repository.interface';
-import { IEmailVerificationRepository } from '../../domain/repositories/emailVerification.repository.interface';
-import { IPasswordResetRepository } from '../../domain/repositories/passwordReset.repository.interface';
+import { UserRepository } from '../../domain/repositories/user.repository';
+import { SessionRepository } from '../../domain/repositories/session.repository';
+import { EmailVerificationRepository } from '../../domain/repositories/emailVerification.repository';
+import { PasswordResetRepository } from '../../domain/repositories/passwordReset.repository';
 import { TokenUtil } from '../../common/utils/token.util';
 import {
   UnauthorizedError,
@@ -34,23 +34,24 @@ export interface AuthResponse {
 }
 
 export class AuthService {
-  private userRepository: IUserRepository;
-  private sessionRepository: ISessionRepository;
-  private emailVerificationRepository: IEmailVerificationRepository;
-  private passwordResetRepository: IPasswordResetRepository;
+  private userRepository: UserRepository;
+  private sessionRepository: SessionRepository;
+  private emailVerificationRepository: EmailVerificationRepository;
+  private passwordResetRepository: PasswordResetRepository;
   private emailService: EmailService;
 
   constructor(
-    userRepository: IUserRepository,
-    sessionRepository: ISessionRepository,
-    emailVerificationRepository: IEmailVerificationRepository,
-    passwordResetRepository: IPasswordResetRepository
+    userRepository: UserRepository,
+    sessionRepository: SessionRepository,
+    emailVerificationRepository: EmailVerificationRepository,
+    passwordResetRepository: PasswordResetRepository,
+    emailService: EmailService // Add EmailService as a dependency
   ) {
     this.userRepository = userRepository;
     this.sessionRepository = sessionRepository;
     this.emailVerificationRepository = emailVerificationRepository;
     this.passwordResetRepository = passwordResetRepository;
-    this.emailService = new EmailService();
+    this.emailService = emailService; // Assign the injected EmailService
   }
 
   /**

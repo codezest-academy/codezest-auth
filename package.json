@@ -1,5 +1,5 @@
 {
-  "name": "codezest-auth",
+  "name": "@codezest-academy/codezest-auth",
   "version": "1.0.0",
   "description": "Authentication microservice for CodeZest Academy",
   "main": "dist/server.js",
@@ -7,7 +7,7 @@
     "dev": "nodemon src/server.ts",
     "build": "tsc",
     "start": "node dist/server.js",
-    "test": "jest",
+    "test": "NODE_ENV=test jest",
     "test:unit": "jest --testPathPattern=tests/unit",
     "test:integration": "jest --testPathPattern=tests/integration",
     "test:coverage": "jest --coverage",
@@ -15,9 +15,9 @@
     "lint:fix": "eslint src/**/*.ts --fix",
     "format": "prettier --write \"src/**/*.ts\"",
     "docs:generate": "tsoa spec-and-routes",
-    "db:generate": "prisma generate --schema=node_modules/@codezest-academy/db/prisma/schema.prisma && cp -r node_modules/@codezest-academy/db/node_modules/.prisma/client node_modules/.prisma/",
-    "db:push": "prisma db push --schema=node_modules/@codezest-academy/db/prisma/schema.prisma",
-    "db:studio": "prisma studio --schema=node_modules/@codezest-academy/db/prisma/schema.prisma"
+    "db:generate": "prisma generate --schema=node_modules/@codezest-academy/codezest-db/prisma/schema.prisma && cp -r node_modules/@codezest-academy/codezest-db/node_modules/.prisma/client node_modules/.prisma/",
+    "db:push": "prisma db push --schema=node_modules/@codezest-academy/codezest-db/prisma/schema.prisma",
+    "db:studio": "prisma studio --schema=node_modules/@codezest-academy/codezest-db/prisma/schema.prisma"
   },
   "keywords": [
     "authentication",
@@ -28,8 +28,10 @@
   "author": "CodeZest Academy",
   "license": "MIT",
   "dependencies": {
-    "@codezest-academy/db": "^1.0.4",
+    "@codezest-academy/codezest-cache": "^1.0.1",
+    "@codezest-academy/codezest-db": "^1.0.5",
     "bcryptjs": "^2.4.3",
+    "chalk": "^5.3.0",
     "cors": "^2.8.5",
     "dotenv": "^16.3.1",
     "express": "^4.18.2",
@@ -41,13 +43,12 @@
     "morgan": "^1.10.0",
     "nodemailer": "^6.9.7",
     "reflect-metadata": "^0.2.1",
+    "strip-ansi": "^7.0.1",
     "swagger-jsdoc": "^6.2.8",
     "swagger-ui-express": "^5.0.1",
     "uuid": "^9.0.1",
     "winston": "^3.11.0",
-    "zod": "^3.22.4",
-    "chalk": "^5.3.0",
-    "strip-ansi": "^7.0.1"
+    "zod": "^3.22.4"
   },
   "devDependencies": {
     "@types/bcryptjs": "^2.4.6",

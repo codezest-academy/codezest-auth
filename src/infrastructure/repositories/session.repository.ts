@@ -1,10 +1,10 @@
 import { Prisma } from '@prisma/client';
 import { Session } from '../../domain/entities';
 import PrismaService from '../database/prisma.service';
-import { ISessionRepository } from '../../domain/repositories/session.repository.interface';
+import { SessionRepository } from '../../domain/repositories/session.repository';
 import { SessionMapper } from '../mappers/session.mapper';
 
-export class SessionRepository implements ISessionRepository {
+export class PrismaSessionRepository implements SessionRepository {
   private prisma = PrismaService.getInstance().client;
   async findByToken(token: string): Promise<Session | null> {
     const session = await this.prisma.session.findUnique({

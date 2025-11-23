@@ -1,7 +1,7 @@
 import { Prisma } from '@prisma/client';
 import { PasswordReset } from '../entities';
 
-export interface IPasswordResetRepository {
+export interface PasswordResetRepository {
   findByToken(token: string): Promise<PasswordReset | null>;
   findByUserId(userId: string): Promise<PasswordReset[]>;
   create(data: Prisma.PasswordResetCreateInput): Promise<PasswordReset>;

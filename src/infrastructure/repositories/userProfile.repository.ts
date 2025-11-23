@@ -1,9 +1,9 @@
 import { UserProfile, Prisma } from '@prisma/client';
 import PrismaService from '../database/prisma.service';
 
-import { IUserProfileRepository } from '../../domain/repositories/userProfile.repository.interface';
+import { UserProfileRepository } from '../../domain/repositories/userProfile.repository';
 
-export class UserProfileRepository implements IUserProfileRepository {
+export class PrismaUserProfileRepository implements UserProfileRepository {
   private prisma = PrismaService.getInstance().client;
   async findByUserId(userId: string): Promise<UserProfile | null> {
     return this.prisma.userProfile.findUnique({

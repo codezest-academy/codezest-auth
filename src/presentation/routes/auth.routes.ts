@@ -2,11 +2,11 @@ import { Router } from 'express';
 import { AuthController } from '../controllers/auth.controller';
 import { AuthService } from '../../application/services/auth.service';
 import { UserService } from '../../application/services/user.service';
-import { UserRepository } from '../../infrastructure/repositories/user.repository';
-import { SessionRepository } from '../../infrastructure/repositories/session.repository';
-import { EmailVerificationRepository } from '../../infrastructure/repositories/emailVerification.repository';
-import { PasswordResetRepository } from '../../infrastructure/repositories/passwordReset.repository';
-import { UserProfileRepository } from '../../infrastructure/repositories/userProfile.repository';
+import { PrismaUserRepository } from '../../infrastructure/repositories/user.repository';
+import { PrismaSessionRepository } from '../../infrastructure/repositories/session.repository';
+import { PrismaEmailVerificationRepository } from '../../infrastructure/repositories/emailVerification.repository';
+import { PrismaPasswordResetRepository } from '../../infrastructure/repositories/passwordReset.repository';
+import { PrismaUserProfileRepository } from '../../infrastructure/repositories/userProfile.repository';
 import { validate } from '../middleware/validate.middleware';
 import { authenticate } from '../middleware/auth.middleware';
 import {
@@ -24,20 +24,24 @@ import {
   changePasswordSchema,
 } from '../../application/dtos/auth.dto';
 
+import { EmailService } from '../../application/services/email.service'; // Import EmailService
+
 const router = Router();
 
 // Dependency Injection
-const userRepository = new UserRepository();
-const sessionRepository = new SessionRepository();
-const emailVerificationRepository = new EmailVerificationRepository();
-const passwordResetRepository = new PasswordResetRepository();
-const userProfileRepository = new UserProfileRepository();
+const userRepository = new PrismaUserRepository();
+const sessionRepository = new PrismaSessionRepository();
+const emailVerificationRepository = new PrismaEmailVerificationRepository();
+const passwordResetRepository = new PrismaPasswordResetRepository();
+const userProfileRepository = new PrismaUserProfileRepository();
+const emailService = new EmailService(); // Instantiate EmailService
 
 const authService = new AuthService(
   userRepository,
   sessionRepository,
   emailVerificationRepository,
-  passwordResetRepository
+  passwordResetRepository,
+  emailService // Pass emailService to the constructor
 );
 
 const userService = new UserService(userRepository, userProfileRepository);

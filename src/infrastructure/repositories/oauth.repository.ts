@@ -1,10 +1,10 @@
 import { Prisma } from '@prisma/client';
 import { OAuthAccount } from '../../domain/entities';
 import PrismaService from '../database/prisma.service';
-import { IOAuthRepository } from '../../domain/repositories/oauth.repository.interface';
+import { OAuthRepository } from '../../domain/repositories/oauth.repository';
 import { OAuthAccountMapper } from '../mappers/oauthAccount.mapper';
 
-export class OAuthRepository implements IOAuthRepository {
+export class PrismaOAuthRepository implements OAuthRepository {
   private prisma = PrismaService.getInstance().client;
   async findByProvider(provider: string, providerId: string): Promise<OAuthAccount | null> {
     const account = await this.prisma.oAuthAccount.findUnique({

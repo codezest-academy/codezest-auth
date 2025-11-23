@@ -1,15 +1,16 @@
 import { User } from '../../domain/entities';
-import { IUserRepository } from '../../domain/repositories/user.repository.interface';
-import { IUserProfileRepository } from '../../domain/repositories/userProfile.repository.interface';
+import { UserRepository } from '../../domain/repositories/user.repository';
+import { UserProfileRepository } from '../../domain/repositories/userProfile.repository';
 import { NotFoundError } from '../../domain/errors';
 import { logger } from '../../config/logger';
 import { UpdateProfileDto, UpdatePreferencesDto } from '../dtos/user.dto';
+import cache from '../../infrastructure/cache/cache.service'; // Import the cache client
 
 export class UserService {
-  private userRepository: IUserRepository;
-  private userProfileRepository: IUserProfileRepository;
+  private userRepository: UserRepository;
+  private userProfileRepository: UserProfileRepository;
 
-  constructor(userRepository: IUserRepository, userProfileRepository: IUserProfileRepository) {
+  constructor(userRepository: UserRepository, userProfileRepository: UserProfileRepository) {
     this.userRepository = userRepository;
     this.userProfileRepository = userProfileRepository;
   }
@@ -20,10 +21,23 @@ export class UserService {
   async getUserById(userId: string): Promise<User> {
     logger.info('Fetching user', { userId });
 
+    const cacheKey = `user:${userId}`;
+    // 1. Try cache
+    const cachedUser = await cache.get<User>(cacheKey);
+    if (cachedUser) {
+      logger.info('User found in cache', { userId });
+      return cachedUser;
+    }
+
+    // 2. Fetch from DB
     const user = await this.userRepository.findById(userId);
     if (!user) {
       throw new NotFoundError('User not found');
     }
+
+    // 3. Set cache (TTL: 1 hour = 3600 seconds)
+    await cache.set(cacheKey, user, 3600);
+    logger.info('User fetched from DB and set in cache', { userId });
 
     return user;
   }
