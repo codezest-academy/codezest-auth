@@ -1,47 +1,76 @@
-import rateLimit from 'express-rate-limit';
-import { config } from '../../config';
+import { RateLimitRequestHandler } from 'express-rate-limit';
+import { createRateLimiter, createStrictRateLimiter } from '../../config/rate-limit.config';
+import { logger } from '../../config/logger';
+
+// Initialize rate limiters (will be set asynchronously)
+let apiLimiter: RateLimitRequestHandler;
+let authLimiter: RateLimitRequestHandler;
+let passwordResetLimiter: RateLimitRequestHandler;
+let emailVerificationLimiter: RateLimitRequestHandler;
 
 /**
- * General API rate limiter
+ * Initialize all rate limiters
+ * This should be called during application startup
  */
-export const apiLimiter = rateLimit({
-  windowMs: config.security.rateLimitWindowMs,
-  max: config.security.rateLimitMaxRequests,
-  message: 'Too many requests from this IP, please try again later',
-  standardHeaders: true,
-  legacyHeaders: false,
-});
+export async function initializeRateLimiters(): Promise<void> {
+  try {
+    logger.info('Initializing rate limiters...');
+
+    // Create general API rate limiter
+    apiLimiter = await createRateLimiter();
+
+    // Create strict rate limiters for sensitive endpoints
+    authLimiter = await createStrictRateLimiter();
+    passwordResetLimiter = await createStrictRateLimiter();
+    emailVerificationLimiter = await createStrictRateLimiter();
+
+    logger.info('Rate limiters initialized successfully');
+  } catch (error) {
+    logger.error('Failed to initialize rate limiters:', error);
+    throw error;
+  }
+}
 
 /**
- * Strict rate limiter for authentication endpoints
+ * Get the API rate limiter
+ * Note: This will throw if called before initialization
  */
-export const authLimiter = rateLimit({
-  windowMs: 15 * 60 * 1000, // 15 minutes
-  max: 5, // Limit each IP to 5 requests per windowMs
-  message: 'Too many authentication attempts, please try again later',
-  skipSuccessfulRequests: true, // Don't count successful requests
-  standardHeaders: true,
-  legacyHeaders: false,
-});
+export function getApiLimiter(): RateLimitRequestHandler {
+  if (!apiLimiter) {
+    throw new Error('Rate limiters not initialized. Call initializeRateLimiters() first.');
+  }
+  return apiLimiter;
+}
 
 /**
- * Rate limiter for password reset requests
+ * Get the auth rate limiter
  */
-export const passwordResetLimiter = rateLimit({
-  windowMs: 60 * 60 * 1000, // 1 hour
-  max: 3, // Limit each IP to 3 password reset requests per hour
-  message: 'Too many password reset requests, please try again later',
-  standardHeaders: true,
-  legacyHeaders: false,
-});
+export function getAuthLimiter(): RateLimitRequestHandler {
+  if (!authLimiter) {
+    throw new Error('Rate limiters not initialized. Call initializeRateLimiters() first.');
+  }
+  return authLimiter;
+}
 
 /**
- * Rate limiter for email verification requests
+ * Get the password reset rate limiter
  */
-export const emailVerificationLimiter = rateLimit({
-  windowMs: 60 * 60 * 1000, // 1 hour
-  max: 5, // Limit each IP to 5 verification requests per hour
-  message: 'Too many verification requests, please try again later',
-  standardHeaders: true,
-  legacyHeaders: false,
-});
+export function getPasswordResetLimiter(): RateLimitRequestHandler {
+  if (!passwordResetLimiter) {
+    throw new Error('Rate limiters not initialized. Call initializeRateLimiters() first.');
+  }
+  return passwordResetLimiter;
+}
+
+/**
+ * Get the email verification rate limiter
+ */
+export function getEmailVerificationLimiter(): RateLimitRequestHandler {
+  if (!emailVerificationLimiter) {
+    throw new Error('Rate limiters not initialized. Call initializeRateLimiters() first.');
+  }
+  return emailVerificationLimiter;
+}
+
+// Export for backward compatibility (will be set after initialization)
+export { apiLimiter, authLimiter, passwordResetLimiter, emailVerificationLimiter };

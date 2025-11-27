@@ -16,7 +16,7 @@ export class OAuthController {
    * GET /api/v1/auth/oauth/google
    */
   getGoogleAuthUrl = asyncHandler(async (req: Request, res: Response) => {
-    const authUrl = this.oauthService.getAuthorizationUrl('google');
+    const authUrl = await this.oauthService.getAuthorizationUrl('google');
 
     res.status(200).json({
       status: 'success',
@@ -29,16 +29,19 @@ export class OAuthController {
    * GET /api/v1/auth/oauth/google/callback
    */
   handleGoogleCallback = asyncHandler(async (req: Request, res: Response) => {
-    const { code } = req.query;
+    const { code, state } = req.query;
 
-    if (!code || typeof code !== 'string') {
+    if (!code || typeof code !== 'string' || !state || typeof state !== 'string') {
       return res.status(400).json({
         status: 'error',
-        message: 'Authorization code is required',
+        message: 'Authorization code and state are required',
       });
     }
 
-    const result = await this.oauthService.handleCallback('google', code);
+    const ip = req.ip || req.socket.remoteAddress || 'unknown';
+    const userAgent = req.headers['user-agent'] || 'unknown';
+
+    const result = await this.oauthService.handleCallback('google', code, state, ip, userAgent);
 
     // Redirect to frontend with tokens
     const redirectUrl = new URL(config.frontend.url);
@@ -54,7 +57,7 @@ export class OAuthController {
    * GET /api/v1/auth/oauth/github
    */
   getGitHubAuthUrl = asyncHandler(async (req: Request, res: Response) => {
-    const authUrl = this.oauthService.getAuthorizationUrl('github');
+    const authUrl = await this.oauthService.getAuthorizationUrl('github');
 
     res.status(200).json({
       status: 'success',
@@ -67,16 +70,19 @@ export class OAuthController {
    * GET /api/v1/auth/oauth/github/callback
    */
   handleGitHubCallback = asyncHandler(async (req: Request, res: Response) => {
-    const { code } = req.query;
+    const { code, state } = req.query;
 
-    if (!code || typeof code !== 'string') {
+    if (!code || typeof code !== 'string' || !state || typeof state !== 'string') {
       return res.status(400).json({
         status: 'error',
-        message: 'Authorization code is required',
+        message: 'Authorization code and state are required',
       });
     }
 
-    const result = await this.oauthService.handleCallback('github', code);
+    const ip = req.ip || req.socket.remoteAddress || 'unknown';
+    const userAgent = req.headers['user-agent'] || 'unknown';
+
+    const result = await this.oauthService.handleCallback('github', code, state, ip, userAgent);
 
     // Redirect to frontend with tokens
     const redirectUrl = new URL(config.frontend.url);

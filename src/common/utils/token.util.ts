@@ -6,6 +6,8 @@ export interface TokenPayload {
   userId: string;
   email: string;
   role: string;
+  familyId?: string;
+  sessionId?: string;
 }
 
 export class TokenUtil {

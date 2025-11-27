@@ -118,8 +118,15 @@ export const createServer = (app: Application): http.Server => {
  */
 export const startServer = async (server: http.Server): Promise<void> => {
   try {
+    // Initialize database connection
     const prisma = PrismaService.getInstance();
     await prisma.connect();
+
+    // Initialize rate limiters (Redis-backed with fallback)
+    const { initializeRateLimiters } = await import(
+      './presentation/middleware/rateLimit.middleware'
+    );
+    await initializeRateLimiters();
 
     server.listen(config.port, () => {
       // Use 100% of terminal width

@@ -18,7 +18,8 @@ describe('UserService', () => {
 
   beforeEach(() => {
     mockUserRepository = new PrismaUserRepository() as jest.Mocked<PrismaUserRepository>;
-    mockUserProfileRepository = new PrismaUserProfileRepository() as jest.Mocked<PrismaUserProfileRepository>;
+    mockUserProfileRepository =
+      new PrismaUserProfileRepository() as jest.Mocked<PrismaUserProfileRepository>;
     mockCache = cache as jest.Mocked<typeof cache>; // Instantiate mockCache
 
     // Reset mocks before each test
@@ -33,9 +34,21 @@ describe('UserService', () => {
       const mockUser = new User(
         'user-id',
         'test@example.com',
-        'Test User',
+        'Test',
+        'User',
+        null,
         'USER',
         true,
+        true,
+        false,
+        null,
+        null,
+        null,
+        null,
+        0,
+        null,
+        null,
+        false,
         new Date(),
         new Date(),
         'hashedPassword'
@@ -53,9 +66,21 @@ describe('UserService', () => {
       const mockUser = new User(
         'user-id',
         'test@example.com',
-        'Test User',
+        'Test',
+        'User',
+        null,
         'USER',
         true,
+        true,
+        false,
+        null,
+        null,
+        null,
+        null,
+        0,
+        null,
+        null,
+        false,
         new Date(),
         new Date(),
         'hashedPassword'
@@ -91,9 +116,21 @@ describe('UserService', () => {
       const mockUser = new User(
         userId,
         'test@example.com',
-        'Test User',
+        'Test',
+        'User',
+        null,
         'USER',
         true,
+        true,
+        false,
+        null,
+        null,
+        null,
+        null,
+        0,
+        null,
+        null,
+        false,
         new Date(),
         new Date(),
         'hashedPassword'
