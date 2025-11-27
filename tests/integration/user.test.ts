@@ -36,7 +36,8 @@ describe('User Integration', () => {
       data: {
         email: 'user@example.com',
         password: 'hashedPassword',
-        name: 'Test User',
+        firstName: 'Test',
+        lastName: 'User',
         role: UserRole.USER, // Use UserRole directly
       },
     });

@@ -66,7 +66,8 @@ describe('Auth Integration', () => {
       const res = await request(app).post('/api/v1/auth/register').send({
         email: 'test@example.com',
         password: 'Password123!',
-        name: 'Test User',
+        firstName: 'Test',
+        lastName: 'User',
       });
 
       expect(res.status).toBe(201);
@@ -79,7 +80,8 @@ describe('Auth Integration', () => {
       const res = await request(app).post('/api/v1/auth/register').send({
         email: 'test@example.com',
         password: 'Password123!',
-        name: 'Test User',
+        firstName: 'Test',
+        lastName: 'User',
       });
 
       expect(res.status).toBe(409);

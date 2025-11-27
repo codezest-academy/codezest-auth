@@ -24,7 +24,8 @@ import {
   changePasswordSchema,
 } from '../../application/dtos/auth.dto';
 
-import { EmailService } from '../../application/services/email.service'; // Import EmailService
+import { EmailService } from '../../application/services/email.service';
+import { CsrfService } from '../../application/services/csrf.service';
 
 const router = Router();
 
@@ -34,7 +35,8 @@ const sessionRepository = new PrismaSessionRepository();
 const emailVerificationRepository = new PrismaEmailVerificationRepository();
 const passwordResetRepository = new PrismaPasswordResetRepository();
 const userProfileRepository = new PrismaUserProfileRepository();
-const emailService = new EmailService(); // Instantiate EmailService
+const emailService = new EmailService();
+const csrfService = new CsrfService();
 
 const authService = new AuthService(
   userRepository,
@@ -46,9 +48,35 @@ const authService = new AuthService(
 
 const userService = new UserService(userRepository, userProfileRepository);
 
-const authController = new AuthController(authService, userService);
+const authController = new AuthController(authService, userService, csrfService);
 
 // Public routes
+
+/**
+ * @swagger
+ * /auth/csrf-token:
+ *   get:
+ *     summary: Get CSRF token
+ *     tags: [Auth]
+ *     responses:
+ *       200:
+ *         description: CSRF token retrieved successfully
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 status:
+ *                   type: string
+ *                   example: success
+ *                 data:
+ *                   type: object
+ *                   properties:
+ *                     csrfToken:
+ *                       type: string
+ */
+router.get('/csrf-token', authController.getCsrfToken);
+
 /**
  * @swagger
  * /auth/register:

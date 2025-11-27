@@ -72,9 +72,13 @@ export class UserService {
       throw new NotFoundError('User not found');
     }
 
-    // Update user name if provided
-    if (data.name) {
-      await this.userRepository.update(userId, { name: data.name });
+    // Update user fields (firstName, lastName, userName) if provided
+    if (data.firstName || data.lastName || data.userName !== undefined) {
+      await this.userRepository.update(userId, {
+        firstName: data.firstName,
+        lastName: data.lastName,
+        userName: data.userName,
+      });
     }
 
     // Check if profile exists
@@ -84,27 +88,47 @@ export class UserService {
       // Create profile if it doesn't exist
       profile = await this.userProfileRepository.create({
         user: { connect: { id: userId } },
+        displayName: data.displayName,
         bio: data.bio,
         avatar: data.avatar,
+        coverImage: data.coverImage,
+        phone: data.phone,
         location: data.location,
+        timezone: data.timezone,
         website: data.website,
+        educationLevel: data.educationLevel,
+        fieldOfStudy: data.fieldOfStudy,
+        institution: data.institution,
+        graduationYear: data.graduationYear,
         occupation: data.occupation,
         company: data.company,
-        phone: data.phone,
-        address: data.address,
+        yearsOfExperience: data.yearsOfExperience,
+        skills: data.skills,
+        learningGoals: data.learningGoals,
+        interests: data.interests,
         socials: data.socials,
       } as any);
     } else {
       // Update existing profile
       profile = await this.userProfileRepository.update(userId, {
+        displayName: data.displayName,
         bio: data.bio,
         avatar: data.avatar,
+        coverImage: data.coverImage,
+        phone: data.phone,
         location: data.location,
+        timezone: data.timezone,
         website: data.website,
+        educationLevel: data.educationLevel,
+        fieldOfStudy: data.fieldOfStudy,
+        institution: data.institution,
+        graduationYear: data.graduationYear,
         occupation: data.occupation,
         company: data.company,
-        phone: data.phone,
-        address: data.address,
+        yearsOfExperience: data.yearsOfExperience,
+        skills: data.skills,
+        learningGoals: data.learningGoals,
+        interests: data.interests,
         socials: data.socials,
       } as any);
     }

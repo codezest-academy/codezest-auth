@@ -2,11 +2,17 @@ import express from 'express';
 import helmet from 'helmet';
 import cors from 'cors';
 import mongoSanitize from 'express-mongo-sanitize';
+import cookieParser from 'cookie-parser';
 import { config } from './config';
 import { httpLogger } from './presentation/middleware/logger.middleware';
 import { errorHandler, notFoundHandler } from './presentation/middleware/error.middleware';
 import { apiLimiter } from './presentation/middleware/rateLimit.middleware';
+import { csrfMiddleware } from './presentation/middleware/csrf.middleware';
 import routes from './presentation/routes';
+import { SessionCleanupJob } from './infrastructure/jobs/sessionCleanup.job';
+
+// Initialize session cleanup job
+new SessionCleanupJob().start();
 
 const app = express();
 
@@ -17,7 +23,7 @@ app.use(
     origin: config.security.allowedOrigins,
     credentials: true,
     methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH', 'OPTIONS'],
-    allowedHeaders: ['Content-Type', 'Authorization'],
+    allowedHeaders: ['Content-Type', 'Authorization', 'X-CSRF-Token'],
   })
 );
 
@@ -30,6 +36,12 @@ app.use(express.urlencoded({ extended: true, limit: '10mb' }));
 
 // Data sanitization against NoSQL query injection
 app.use(mongoSanitize());
+
+// Cookie parsing
+app.use(cookieParser());
+
+// CSRF Protection
+app.use(csrfMiddleware);
 
 // Logging
 app.use(httpLogger);

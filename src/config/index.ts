@@ -7,7 +7,6 @@ dotenv.config();
 // Validate required environment variables
 const requiredEnvVars = [
   'DATABASE_URL',
-  'JWT_SECRET',
   'JWT_REFRESH_SECRET',
   'PORT',
   'REDIS_HOST',
@@ -19,6 +18,13 @@ for (const envVar of requiredEnvVars) {
   if (!process.env[envVar]) {
     throw new Error(`Missing required environment variable: ${envVar}`);
   }
+}
+
+// Validate JWT_ACCESS_SECRET or JWT_SECRET (backward compatibility)
+if (!process.env.JWT_ACCESS_SECRET && !process.env.JWT_SECRET) {
+  throw new Error(
+    'Missing required environment variable: JWT_ACCESS_SECRET (or JWT_SECRET for backward compatibility)'
+  );
 }
 
 export const config = {
@@ -37,7 +43,8 @@ export const config = {
   },
 
   jwt: {
-    secret: process.env.JWT_SECRET!,
+    // Support both JWT_ACCESS_SECRET (new standard) and JWT_SECRET (backward compatibility)
+    secret: (process.env.JWT_ACCESS_SECRET || process.env.JWT_SECRET)!,
     refreshSecret: process.env.JWT_REFRESH_SECRET!,
     expiresIn: process.env.JWT_EXPIRES_IN || '15m',
     refreshExpiresIn: process.env.JWT_REFRESH_EXPIRES_IN || '7d',
